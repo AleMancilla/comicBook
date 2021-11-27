@@ -4,7 +4,9 @@ import 'package:commic_app/app/data/provider/comic_provider.dart';
 import 'package:commic_app/app/data/repositories_impl/comic_repository_imp.dart';
 import 'package:commic_app/app/domain/models/comic_model_response.dart' as cmr;
 import 'package:commic_app/app/domain/repositories/comic_repository.dart';
+import 'package:commic_app/app/ui/atomic/molecule/app_bar_widget.dart';
 import 'package:commic_app/app/ui/atomic/molecule/comic_widget_item.dart';
+import 'package:commic_app/app/ui/atomic/molecule/top_banner_body.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +22,7 @@ class _MyAppState extends State<MyApp> {
   late ComicProvider comicProvider;
 
   late final ComicRepository comic;
+  bool listModeView = true;
 
   @override
   void initState() {
@@ -43,18 +46,41 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
+      home: SafeArea(
+        child: Scaffold(
+          appBar: const PreferredSize(
+            preferredSize: Size(
+              double.infinity,
+              50,
+            ),
+            child: AppBarWidget(
+              title: 'ComicBook',
+            ),
+          ),
+          body: Column(
+            children: [
+              TopBannerBody(
+                title: const Text('Latest Issues'),
+                changeState: (isList) {
+                  listModeView = isList;
+                  setState(() {});
+                },
+              ),
+              Expanded(child: bodyPage()),
+            ],
+          ),
         ),
-        body: bodyPage(),
       ),
     );
   }
 
   Widget bodyPage() {
     if (comicProvider.listComicProvider != null) {
-      return listComicView();
+      if (listModeView) {
+        return listComicView();
+      } else {
+        return gridComicView();
+      }
     } else {
       return Center(
         child: Image.asset('assets/images/loading/loading-bar.gif'),
@@ -75,9 +101,26 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  _itemListComic(cmr.Comic comic) {
+  Widget gridComicView() {
+    try {
+      return Center(
+        child: SingleChildScrollView(
+          child: Wrap(
+            children: comicProvider.listComicProvider!
+                .map((comic) => _itemListComic(comic, isListView: false))
+                .toList(),
+          ),
+        ),
+      );
+    } catch (e) {
+      return Center(child: Text('Error: $e'));
+    }
+  }
+
+  Widget _itemListComic(cmr.Comic comic, {bool isListView = true}) {
     return ComicWidgetItem(
       comic: comic,
+      isListModeView: isListView,
     );
   }
 }

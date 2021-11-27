@@ -4,9 +4,11 @@ import 'package:jiffy/jiffy.dart';
 
 class ComicWidgetItem extends StatelessWidget {
   final Comic comic;
+  final bool isListModeView;
   ComicWidgetItem({
     Key? key,
     required this.comic,
+    this.isListModeView = true,
   }) : super(key: key);
 
   final BorderRadius borderWidget = BorderRadius.circular(8);
@@ -27,7 +29,7 @@ class ComicWidgetItem extends StatelessWidget {
           ]),
       child: ClipRRect(
         borderRadius: borderWidget,
-        child: _itemRow(),
+        child: isListModeView ? _itemRow() : _itemColumn(),
       ),
     );
   }
@@ -52,6 +54,32 @@ class ComicWidgetItem extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _itemColumn() {
+    return SizedBox(
+      width: 150,
+      child: Column(
+        children: [
+          SizedBox(
+            width: 150,
+            child: FadeInImage(
+              placeholder:
+                  const AssetImage('assets/images/loading/loading-bar.gif'),
+              image: NetworkImage('${comic.image!.smallUrl}'),
+            ),
+          ),
+          Center(
+            child: ListTile(
+              title: Text(
+                "${comic.name ?? comic.volume!.name ?? 'REALLY NO DATA'} - #${comic.issueNumber}",
+              ),
+              subtitle: Text(Jiffy(comic.dateAdded).yMMMMd),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
