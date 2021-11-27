@@ -10,7 +10,7 @@ class Http {
 
   Http({this.baseUrl = ''});
 
-  request<T>(
+  Future<HttpResult<T>> request<T>(
     String path, {
     HttpMethod method = HttpMethod.get,
     Map<String, String> headers = const {},
@@ -76,7 +76,7 @@ class Http {
           exception: e,
           stackTrace: s,
         ),
-        statusCode: statusCode!,
+        statusCode: -1,
       );
     }
   }
