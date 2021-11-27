@@ -29,6 +29,8 @@ class Http {
         url = Uri.parse("$baseUrl$path");
       }
 
+      print(url);
+
       if (queryParameters.isNotEmpty) {
         url = url.replace(
           queryParameters: {
@@ -61,6 +63,8 @@ class Http {
         error: null,
       );
     } catch (e, s) {
+      print("----" + e.toString());
+      print("====" + s.toString());
       if (e is HttpError) {
         return HttpResult<T>(
           data: null,
@@ -76,7 +80,7 @@ class Http {
           exception: e,
           stackTrace: s,
         ),
-        statusCode: -1,
+        statusCode: statusCode ?? -1,
       );
     }
   }

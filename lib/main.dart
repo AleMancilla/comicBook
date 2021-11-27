@@ -1,7 +1,7 @@
 import 'package:commic_app/app/data/data_source/remote/comic_app.dart';
 import 'package:commic_app/app/data/helpers/http.dart';
 import 'package:commic_app/app/data/repositories_impl/comic_repository_imp.dart';
-import 'package:commic_app/app/domain/comic_repository.dart';
+import 'package:commic_app/app/domain/repositories/comic_repository.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
