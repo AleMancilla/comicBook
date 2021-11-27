@@ -20,6 +20,7 @@ class Http {
     Duration timeOut = const Duration(seconds: 10),
   }) async {
     int? statusCode;
+    // ignore: unnecessary_question_mark
     dynamic? data;
     try {
       late Uri url;
@@ -29,7 +30,7 @@ class Http {
         url = Uri.parse("$baseUrl$path");
       }
 
-      print(url);
+      // print(url);
 
       if (queryParameters.isNotEmpty) {
         url = url.replace(
@@ -63,8 +64,8 @@ class Http {
         error: null,
       );
     } catch (e, s) {
-      print("----" + e.toString());
-      print("====" + s.toString());
+      // print("----" + e.toString());
+      // print("====" + s.toString());
       if (e is HttpError) {
         return HttpResult<T>(
           data: null,
