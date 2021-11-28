@@ -3,6 +3,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -14,7 +15,13 @@ buildscript {
 allprojects {
     repositories {
         google()
+        jcenter()
         mavenCentral()
+    }
+    gradle.projectsEvaluated{
+        tasks.withType(JavaCompile){
+            options.compilerArgs << "-Xlint:deprecation"
+        }
     }
 }
 
@@ -24,6 +31,9 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
+subprojects {
+    project.evaluationDependsOn(':app')
+}
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

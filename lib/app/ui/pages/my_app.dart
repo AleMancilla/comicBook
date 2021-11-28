@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Material App',
+      title: 'ComicBook',
       home: SafeArea(
         child: Scaffold(
           appBar: const PreferredSize(
