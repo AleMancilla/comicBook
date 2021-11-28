@@ -5,19 +5,22 @@ import 'package:jiffy/jiffy.dart';
 class ComicWidgetItem extends StatelessWidget {
   final Comic comic;
   final bool isListModeView;
+  final Function onTap;
   ComicWidgetItem({
     Key? key,
     required this.comic,
     this.isListModeView = true,
+    required this.onTap,
   }) : super(key: key);
 
   final BorderRadius borderWidget = BorderRadius.circular(8);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      child: Container(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: borderWidget,
           boxShadow: const [
@@ -26,10 +29,36 @@ class ComicWidgetItem extends StatelessWidget {
               offset: Offset(-2, -2),
               blurRadius: 5,
             )
-          ]),
-      child: ClipRRect(
-        borderRadius: borderWidget,
-        child: isListModeView ? _itemRow() : _itemColumn(),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: borderWidget,
+          child: Material(
+            child: InkWell(
+              onTap: () {
+                onTap();
+              },
+              child: Ink(
+                // margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: borderWidget,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(-2, -2),
+                      blurRadius: 5,
+                    )
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: borderWidget,
+                  child: isListModeView ? _itemRow() : _itemColumn(),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -39,11 +68,7 @@ class ComicWidgetItem extends StatelessWidget {
       children: [
         SizedBox(
           width: 130,
-          child: FadeInImage(
-            placeholder:
-                const AssetImage('assets/images/loading/loading-bar.gif'),
-            image: NetworkImage('${comic.image!.smallUrl}'),
-          ),
+          child: _fadeInImage(),
         ),
         Expanded(
           child: ListTile(
@@ -57,6 +82,16 @@ class ComicWidgetItem extends StatelessWidget {
     );
   }
 
+  Widget _fadeInImage() {
+    return Hero(
+      tag: comic.id.toString(),
+      child: FadeInImage(
+        placeholder: const AssetImage('assets/images/loading/loading-bar.gif'),
+        image: NetworkImage('${comic.image!.smallUrl}'),
+      ),
+    );
+  }
+
   Widget _itemColumn() {
     return SizedBox(
       width: 150,
@@ -64,11 +99,7 @@ class ComicWidgetItem extends StatelessWidget {
         children: [
           SizedBox(
             width: 150,
-            child: FadeInImage(
-              placeholder:
-                  const AssetImage('assets/images/loading/loading-bar.gif'),
-              image: NetworkImage('${comic.image!.smallUrl}'),
-            ),
+            child: _fadeInImage(),
           ),
           Center(
             child: ListTile(

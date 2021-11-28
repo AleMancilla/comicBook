@@ -7,6 +7,7 @@ import 'package:commic_app/app/domain/repositories/comic_repository.dart';
 import 'package:commic_app/app/ui/atomic/molecule/app_bar_widget.dart';
 import 'package:commic_app/app/ui/atomic/molecule/comic_widget_item.dart';
 import 'package:commic_app/app/ui/atomic/molecule/top_banner_body.dart';
+import 'package:commic_app/app/ui/pages/details_comic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -118,9 +119,20 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _itemListComic(cmr.Comic comic, {bool isListView = true}) {
-    return ComicWidgetItem(
-      comic: comic,
-      isListModeView: isListView,
-    );
+    return Builder(builder: (context) {
+      return ComicWidgetItem(
+        comic: comic,
+        isListModeView: isListView,
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => DetailsComic(
+                  comic: comic,
+                ),
+              ));
+        },
+      );
+    });
   }
 }

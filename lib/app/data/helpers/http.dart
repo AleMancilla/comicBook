@@ -30,7 +30,7 @@ class Http {
         url = Uri.parse("$baseUrl$path");
       }
 
-      // print(url);
+      print(url);
 
       if (queryParameters.isNotEmpty) {
         url = url.replace(
